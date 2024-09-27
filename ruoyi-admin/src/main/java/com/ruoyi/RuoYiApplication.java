@@ -20,15 +20,14 @@ import java.util.Objects;
  */
 @Slf4j
 @EnableDiscoveryClient
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class}, scanBasePackages = {"com.ruoyi.*"})
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 public class RuoYiApplication {
     public static void main(String[] args) throws UnknownHostException {
         // run变量存储了返回的ConfigurableApplicationContext实例，这是一个Spring应用程序上下文，可以用来获取Spring容器中的bean或关闭应用程序
         ConfigurableApplicationContext run = SpringApplication.run(RuoYiApplication.class, args);
-        log.info("111");
-        System.out.println(1111);
+
         // InetAddress.getLocalHost().getHostAddress(): 获取本地主机的IP地址
-        log.info(startAppLog(run, InetAddress.getLocalHost().getHostAddress()));
+//        log.info(startAppLog(run, InetAddress.getLocalHost().getHostAddress()));
     }
 
 
