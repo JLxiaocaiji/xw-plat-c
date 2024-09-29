@@ -27,7 +27,7 @@ public class RuoYiApplication {
         ConfigurableApplicationContext run = SpringApplication.run(RuoYiApplication.class, args);
 
         // InetAddress.getLocalHost().getHostAddress(): 获取本地主机的IP地址
-//        log.info(startAppLog(run, InetAddress.getLocalHost().getHostAddress()));
+        log.info(startAppLog(run, InetAddress.getLocalHost().getHostAddress()));
     }
 
 
