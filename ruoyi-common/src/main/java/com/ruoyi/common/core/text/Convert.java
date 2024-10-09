@@ -2,6 +2,8 @@ package com.ruoyi.common.core.text;
 
 import com.ruoyi.common.util.StringUtil;
 
+import java.util.Locale;
+
 /** 类型转换器 **/
 public class Convert {
     /**
@@ -58,5 +60,52 @@ public class Convert {
         final String valueStr = toStr(value, null);
         // 如果转换后的字符串为空或null，则返回默认值， 否则，返回字符串的第一个字符
         return StringUtil.isEmpty(valueStr) ? defaultValue : valueStr.charAt(0);
+    }
+
+    /**
+     * 转换为boolean<br>
+     * 如果给定的值为空，或者转换失败，返回默认值<code>null</code><br>
+     * 转换失败不会报错
+     * @param value 被转换的值
+     * @return 结果
+     */
+    public static Boolean toBool(Object value) {
+        return toBool(value, null);
+    }
+
+    /**
+     * 转换为boolean<br>
+     * String支持的值为：true、false、yes、ok、no，1,0 如果给定的值为空，或者转换失败，返回默认值<br>
+     * 转换失败不会报错
+     *
+     * @param value 被转换的值
+     * @param defaultValue 转换错误时的默认值
+     * @return 结果
+     */
+    public static Boolean toBool(Object value, Boolean defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+        String valueStr = toStr(value, null);
+        if ( StringUtil.isEmpty(valueStr)) {
+            return defaultValue;
+        }
+        valueStr = valueStr.trim().toLowerCase();
+        switch( valueStr) {
+            case "true":
+            case "yes":
+            case "ok":
+            case "1":
+                return true;
+            case "false":
+            case "no":
+            case "0":
+                return false;
+            default:
+                return defaultValue;
+        }
     }
 }

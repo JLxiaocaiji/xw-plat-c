@@ -42,4 +42,19 @@ public class SpringUtils implements BeanFactoryPostProcessor, ApplicationContext
     public static <T> T getBean(String name) throws BeansException {
         return (T) beanFactory.getBean(name);
     }
+
+    /**
+     * 获取类型为requiredType的对象
+     *
+     * @param clz
+     * @return
+     * @throws org.springframework.beans.BeansException
+     *
+     */
+    // Class<T> clz: Class对象，表示你想要获取的Bean的类型
+    public static <T> T getBean(Class<T> clz) throws BeansException {
+        // 从 beanFactory 中获取一个类型为 clz 的Bean实例
+        T result = (T) beanFactory.getBean(clz);
+        return result;
+    }
 }

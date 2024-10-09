@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysConfigMapper">
+
+<!--    指定传入这个查询的参数类型，这里是SysConfig类, SysConfig 是之前就定义好的, MyBatis会自动将这个类的实例字段映射到SQL查询中的参数-->
+<!--    指定查询结果的返回类型，这里是SysConfigResult类，MyBatis会将SQL查询的结果集映射到这个类的实例中-->
+    <select id="selectConfig" parameterType="SysConfig" resultMap="SysConfigResult">
+        <!--    <include refid="selectConfigVo"/>：这是一个MyBatis的<include>元素，它用于包含其他定义好的SQL片段。refid="selectConfigVo"指定了要包含的SQL片段的id，这个片段通常定义在同一个或其他的MyBatis映射文件中-->
+        <include refid="selectConfigVo"/>
+        <include refid="sqlwhereSearch" />
+    </select>
+
+<!--    type="SysConfig"： 指定了结果映射的目标对象类型，这里是 SysConfig 类-->
+<!--    id="SysConfigResult"： 为这个结果映射定义了一个唯一的标识符，你可以通过这个id在MyBatis的其他地方引用这个映射-->
+    <resultMap type="SysConfig" id="SysConfigResult">
+<!--    <id>： 定义了主键列与Java对象属性的映射关系。MyBatis会使用这个映射来识别对象的唯一性，特别是在做更新操作时-->
+<!--        property="configId"：指定了Java对象中对应的属性名。-->
+<!--        column="config_id"：指定了数据库表中对应的列名。-->
+        <id     property="configId"      column="config_id"      />
+        <result property="configName"    column="config_name"    />
+        <result property="configKey"     column="config_key"     />
+        <result property="configValue"   column="config_value"   />
+        <result property="configType"    column="config_type"    />
+
+<!--        下面这 4 项是从 import com.ruoyi.common.core.domain.BaseEntity; 中获取的-->
+        <result property="createBy"      column="create_by"      />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"      column="update_by"      />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectConfigVo">
+        select config_id, config_name, config_key, config_value, config_type, create_by, create_time, update_by, update_time, remark
+        from sys_config
+    </sql>
+
+    <sql id="sqlwhereSearch">
+        <where>
+            <if test="configId != null">
+                and config_id = #{configId}
+            </if>
+            <if test="configKey != null and configKey != ''">
+                and config_key = #{configKey}
+            </if>
+        </where>
+    </sql>
+
+<!--    参数类型：SysConfig；结果映射：SysConfigResult-->
+    <select id="selectConfigList" parameterType="SysConfig" resultMap="SysConfigResult">
+        -- 包含一个名为 selectConfigVo 的 SQL 片段，这通常是另一个定义了基础字段选择的 SQL 片段
+        <include refid="selectConfigVo" />
+        <where>
+            <if test="configName != nuull and configName != ''">
+                and config_name like concat ('%', #{configName}, '%')
+            </if>
+            <if test="configType != null and configType != ''">
+                and config_type =#{ configType }
+            </if>
+            <if test="configKey != null and configKey != ''">
+                and config_key like concat ('%', #{configKLey}, '%')
+            </if>
+            <if test="params.beginTime != null and params.beginTime != ''">
+                and date_fornat(create_time, '%y%m%d') >= date_format(#{params.beginTime}, '%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+</mapper>

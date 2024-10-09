@@ -20,7 +20,8 @@ import java.util.Objects;
  */
 @Slf4j
 @EnableDiscoveryClient
-@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+// 排除特定的自动配置类; 定义了组件扫描的基础包
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class, scanBasePackages = {"com.ruoyi.*"})
 public class RuoYiApplication {
     public static void main(String[] args) throws UnknownHostException {
         // run变量存储了返回的ConfigurableApplicationContext实例，这是一个Spring应用程序上下文，可以用来获取Spring容器中的bean或关闭应用程序
