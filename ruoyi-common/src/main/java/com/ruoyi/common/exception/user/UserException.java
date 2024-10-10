@@ -1,17 +1,8 @@
-package com.ruoyi.common.core.domain;
+package com.ruoyi.common.exception.user;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ruoyi.common.exception.base.BaseException;
 
-import java.io.Serializable;
-import java.util.Date;
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class BaseEntity implements Serializable {
+public class UserException extends BaseException{
     /**
      * serialVersionUID: 是一个序列化版本标识符，它是用于序列化过程中验证版本一致性的
      * 当一个对象被序列化时，这个唯一标识符会与对象一起被保存。当对象被反序列化时，这个标识符会被用来确认序列化的对象与当前类的定义是否兼容
@@ -19,17 +10,7 @@ public class BaseEntity implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    /** 创建者 **/
-    private String createBy;
-
-    /** 创建时间 **/
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
-
-    /** 更新者 **/
-    private String updateBy;
-
-    /** 更新时间 **/
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+    public UserException(String code, Object[] args) {
+        super("user", code, args, null);
+    }
 }

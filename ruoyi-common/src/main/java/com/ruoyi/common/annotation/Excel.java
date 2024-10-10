@@ -16,8 +16,18 @@ public @interface Excel {
     // cellType() 方法定义了一个名为 cellType 的成员变量，其类型为 ColumnType。这个成员变量默认值为 ColumnType.STRING
     public ColumnType cellType() default ColumnType.STRING;
 
+    /**
+     * 导出时在excel中每个列的宽 单位为字符
+     */
+    public double width() default 16;
+
     /** 读取内容转表达式 (如: 0=男,1=女,2=未知) **/
     public String readConverterExp() default "";
+
+    /**
+     * 日期格式, 如: yyyy-MM-dd
+     */
+    public String dateFormat() default "";
 
 
     public enum ColumnType {

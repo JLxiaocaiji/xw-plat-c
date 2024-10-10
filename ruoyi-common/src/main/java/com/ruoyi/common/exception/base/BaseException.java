@@ -1,8 +1,5 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.common.exception.base;
 
-import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.annotation.Excel.ColumnType;
-import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SysConfig extends BaseEntity {
+public class BaseException extends RuntimeException {
     /**
      * serialVersionUID: 是一个序列化版本标识符，它是用于序列化过程中验证版本一致性的
      * 当一个对象被序列化时，这个唯一标识符会与对象一起被保存。当对象被反序列化时，这个标识符会被用来确认序列化的对象与当前类的定义是否兼容
@@ -18,20 +15,16 @@ public class SysConfig extends BaseEntity {
      */
     private static final long serialVersionUID = 1L;
 
-    /** 参数主键 */
-    @Excel(name = "参数主键", cellType = ColumnType.NUMERIC)
-    private Long configId;
+    /** 所属模块 **/
+    private String module;
 
-    @Excel(name = "参数名称")
-    private String configName;
+    /** 错误码 **/
+    private String code;
 
-    @Excel(name = "参数键名")
-    private String configKey;
+    /** 错误码对应的参数 **/
+    private Object[] args;
 
-    @Excel(name = "参数键值")
-    private String configValue;
+    /** 错误消息 **/
+    private String defaultMessage;
 
-    // 当从Excel文件中读取这个字段的值时，如果单元格中的值是 "Y"，它将被转换为 "是"；如果单元格中的值是 "N"，它将被转换为 "否"
-    @Excel(name = "系统内置", readConverterExp = "Y=是,N=否")
-    private String configType;
 }

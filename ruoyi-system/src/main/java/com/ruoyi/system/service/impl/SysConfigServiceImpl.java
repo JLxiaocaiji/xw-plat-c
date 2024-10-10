@@ -20,20 +20,27 @@ public class SysConfigServiceImpl implements ISysConfigService {
     @Autowired
     private SysConfigMapper configMapper;
 
+    /**
+     * 获取验证码开关
+     *
+     * @return true开启，false关闭
+     */
     @Override
     public boolean selectCaptchaEnabled() {
         String captchaEnabled = selectConfigByKey("sys.account.captchaEnabled");
 
+        // 如果配置值为空，则默认启用验证码
         if (StringUtil.isEmpty(captchaEnabled)) {
             return true;
         }
+        // 否则，将配置值转换为布尔值并返回
         return Convert.toBool(captchaEnabled);
     }
 
     /**
      * 根据键名查询参数配置信息
      *
-     * @param configKey 参数key
+     * @param configKey 参数key sys.account.captchaEnabled
      * @return 参数键值
      */
     public String selectConfigByKey(String configKey) {
@@ -46,16 +53,20 @@ public class SysConfigServiceImpl implements ISysConfigService {
             return configValue;
         }
 
+        // 如果缓存中没有配置值，则创建一个SysConfig对象并设置配置键
         SysConfig config = new SysConfig();
         config.setConfigKey(configKey);
 
+        // 使用configMapper从数据库中检索配置
         SysConfig retConfig = configMapper.selectConfig(config);
 
         System.out.println(retConfig);
 
         if (StringUtil.isNotNull(retConfig)) {
+            // 将配置值存入Redis缓存，缓存键为配置键
             // cache key: 参数键值
             redisCache.setCacheObject(getCacheKey(configKey), retConfig.getConfigValue());
+            // 返回配置值
             return retConfig.getConfigValue();
         }
         // 返回值为： ""
