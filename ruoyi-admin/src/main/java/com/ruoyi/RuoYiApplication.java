@@ -15,8 +15,6 @@ import java.util.Objects;
 
 /**
  * 启动程序
- *
- * @author ruoyi
  */
 @Slf4j
 @EnableDiscoveryClient

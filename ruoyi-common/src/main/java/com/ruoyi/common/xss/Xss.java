@@ -12,11 +12,10 @@ import java.lang.annotation.Target;
 @Target(value = { ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.PARAMETER})
 @Constraint(validatedBy = {XssValidator.class}) // 创建自定义的约束注解 XssValidator
 public @interface Xss {
-    String message();
+    String message() default "不允许任何脚本运行";
 
-    default "不允许任何脚本运行";
-
-    Class<?> groups() default {};
-
+    // 定义了一个名为 groups 的元素，它的类型是 Class<?>，表示它可以接受任何类型的 Class 对象。默认值是一个空数组，意味着如果没有指定 groups，则默认为空
+    Class<?>[] groups() default {};
+    // 定义了一个名为 payload 的元素，它的类型是一个 Class 对象数组，这些对象必须是 Payload 的子类。默认值同样是一个空数组
     Class<? extends Payload>[] payload() default {};
 }

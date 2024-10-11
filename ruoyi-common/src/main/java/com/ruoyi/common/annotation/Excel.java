@@ -29,6 +29,26 @@ public @interface Excel {
      */
     public String dateFormat() default "";
 
+    /** 另一个类中的属性名称,支持多级获取,以小数点隔开 **/
+    public String targetAttr() default "";
+
+    /** 提示信息 **/
+    public String prompt() default "";
+
+    /** 字段类型（0：导出导入；1：仅导出；2：仅导入） **/
+    Type type() default Type.ALL;
+
+    public enum Type {
+        ALL(0), EXPORT(1), IMPORT(2);
+        // 私有成员变量，它用于存储与每个枚举常量关联的整数值
+        private final int value;
+        Type(int value) {
+            this.value = value;
+        }
+        public int value() {
+            return this.value;
+        }
+    }
 
     public enum ColumnType {
         // 分别定义了名为 NUMERIC，STRING，IMAGE 的枚举常量，其关联的整数值分别为 0，1，2

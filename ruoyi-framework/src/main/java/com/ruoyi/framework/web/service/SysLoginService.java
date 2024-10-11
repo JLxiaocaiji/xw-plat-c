@@ -3,12 +3,16 @@ package com.ruoyi.framework.web.service;
 import com.ruoyi.common.constant.CacheConstants;
 import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.exception.user.CaptchaException;
 import com.ruoyi.common.exception.user.CaptchaExpireException;
 import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
+import com.ruoyi.common.util.DateUtils;
+import com.ruoyi.common.util.ServletUtils;
 import com.ruoyi.common.util.StringUtil;
+import com.ruoyi.common.util.ip.IpUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import com.ruoyi.framework.security.context.AuthenticationContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import com.ruoyi.common.util.MessageUtils;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.system.service.ISysConfigService;
+import com.ruoyi.system.service.ISysUserService;
 
 import javax.annotation.Resource;
 
@@ -34,8 +39,14 @@ public class SysLoginService {
     @Autowired
     private RedisCache redisCache;
 
-    @Resource
-    private AuthenticationManager authenticationManager;
+    @Resource   // 自动注入依赖
+    private AuthenticationManager authenticationManager;    // 是Spring Security中的一个核心接口，用于处理认证请求
+
+    @Autowired
+    private ISysUserService userService;
+
+    @Autowired
+    private TokenService tokenService;
 
     public String login(String username, String password, String code, String uuid) {
         // 为空的话，就是 true,
@@ -66,7 +77,10 @@ public class SysLoginService {
             AuthenticationContextHolder.clearContext();
         }
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal()
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        recordLoginInfo(loginUser.getUserId());
+        // 生成token
+        return tokenService.createToken(loginUser);
     }
 
     /**
@@ -98,5 +112,13 @@ public class SysLoginService {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.jcaptcha.error")));
             throw new CaptchaException();
         }
+    }
+
+    public void recordLoginInfo(Long userId) {
+        SysUser sysUser = new SysUser();
+        sysUser.setUserId(userId);
+        sysUser.setLoginIp(IpUtils.getIpAddr(ServletUtils.getRequest()));
+        sysUser.setLoginDate(DateUtils.getNowDate());
+        userService.updateUserProfile(sysUser);
     }
 }

@@ -9,8 +9,6 @@ import com.ruoyi.common.core.domain.entity.SysUser;
 
 /**
  * 登录用户身份权限
- *
- * @author ruoyi
  */
 public class LoginUser implements UserDetails
 {
