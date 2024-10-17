@@ -2,6 +2,10 @@ package com.ruoyi.framework.web.service;
 
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.redis.RedisCache;
+import com.ruoyi.common.util.ServletUtils;
+import com.ruoyi.common.util.ip.AddressUtils;
+import com.ruoyi.common.util.ip.IpUtils;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -35,5 +39,18 @@ public class TokenService {
      */
     private String createToken(LoginUser loginUser) {
         String token = IdUtils.fastUUID();
+        loginUser.setToken(token);
+        setUserAgent(loginUser);
+        refreshToken(loginUser);
+
+    }
+
+
+    public void setUserAgent(LoginUser loginUser) {
+        //
+        UserAgent userAgent = UserAgent.parseUserAgentString(ServletUtils.getRequest().getHeader("User-Agent"));
+        String ip = IpUtils.getIpAddr(ServletUtils.getRequest());
+        loginUser.setIpaddr(ip);
+        loginUser.setLoginLocation(AddressUtils.getRealAddressByIp(ip));
     }
 }
