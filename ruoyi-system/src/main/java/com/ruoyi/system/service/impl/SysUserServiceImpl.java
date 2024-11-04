@@ -17,4 +17,9 @@ public class SysUserServiceImpl implements ISysUserService {
     public int updateUserProfile(SysUser user) {
         return userMapper.updateUser(user);
     }
+
+    @Override
+    public SysUser selectUserByUserName(String userName) {
+        return userMapper.selectUserByUserName(userName);
+    }
 }

@@ -16,7 +16,6 @@ import com.ruoyi.common.util.ip.IpUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import com.ruoyi.framework.security.context.AuthenticationContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
